@@ -1,13 +1,266 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,600;1,800;1,900&display=swap');
+
+* {
+  font-family: 'Poppins', sans-serif;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body {
+  background-color: #f3fbff;
+}
+
+i.icon.big svg {
+  width: 48px;
+  heighT: 48px;
+}
+
+i.icon.white svg path {
+  fill: white;
+}
+
+p.grayed-out {
+  color: #ffffff94;
+}
+
+.fs-7 {
+  font-size: .85rem
+}
+
+.rounded {
+  border-radius: 12px !important
+}
+
+.card.city-card .city-img {
+  background: red;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.card.city-card .city-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.card.city-card {
+  width: 180px;
+  height: 240px;
+}
+
+.card.city-card .city-img .img-cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: linear-gradient(180deg, rgba(217, 217, 217, 0) 29.55%, rgb(0 0 0 / 76%) 90.73%);
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.card.city-card .city-title {
+  z-index: 3;
+  color: White;
+}
+
+.bg-blue {
+  background-color: #110e3c;
+}
+
+.today-weather {
+  height: 100vh;
+  color: White;
+}
+
+h1.weather-c {
+  font-size: 5em !important;
+}
+
+h1.weather-c i {
+  text-decoration: none;
+  font-style: normal;
+  font-size: 22px;
+  font-weight: 300;
+  position: absolute;
+  top: 10px;
+  right: -30px;
+}
+
+.tabs-header {
+  background: #eaf4f9;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show>.nav-link {
+  color: #110e3c;
+  background: white;
+}
+
+.nav-pills .nav-link {
+  color: #bbbbbb;
+}
+
+.nav-link:focus,
+.nav-link:hover {
+  color: black;
+}
+
+.bg-img.position-absolute {
+  left: 0;
+  top: 0;
+  border-radius: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100vh;
+}
+
+.details-container {
+  position: relative;
+  z-index: 2;
+  height: 100vh;
+}
+
+.bg-img.position-absolute img {
+  height: 100vh;
+  width: 100% !important;
+  object-fit: cover;
+}
+
+.bg-img.position-absolute .img-cover {
+  background: #110e3cde;
+  z-index: 2;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  top: 0;
+  height: 100vh;
+}
+
+.today-weather .btn-link {
+  color: white;
+  text-decoration: none;
+}
+
+.today-weather .btn-link i {
+  position: relative;
+  top: -1px;
+  margin-right: 5px;
+}
+
+.today-weather .btn-link span {
+  margin-left: 5px;
+}
+
+.card.city-card .city-buttons {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  left: 0;
+  padding: 1em;
+  z-index: 4;
+  text-align: right;
+}
+
+.card.city-card .city-buttons button {
+  background: white;
+  border: 2px solid white;
+  border-radius: 200px;
+  font-size: 12px;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  line-height: 32px;
+}
+
+.card.city-card .city-buttons button svg {
+  width: 20px;
+  height: 20px;
+}
+
+.card.city-card .city-buttons button svg path {
+  fill: red;
+}
+
+.card.city-card .city-buttons button:hover,
+.card.city-card .city-buttons button.favorite-added {
+  background: red;
+  border-color: red;
+}
+
+.card.city-card .city-buttons button:hover svg path,
+.card.city-card .city-buttons button.favorite-added svg path {
+  fill: white;
+  stroke: white;
+}
+
+.card.city-card .city-img {
+  overflow: hidden;
+}
+
+.card.city-card .city-img img {
+  transform: scale(1);
+  transition: all .5s;
+}
+
+.card.city-card:hover .city-img img {
+  transform: scale(1.2);
+}
+
+.search-city .input-group-text {
+  background: transparent;
+  border: none;
+}
+
+.search-city .input-group-text i svg path {
+  fill: #b1b1b1;
+}
+
+.search-city input {
+  border: none;
+  outline: none;
+  background: white;
+  box-shadow: none !important;
+}
+
+.search-city .input-group {
+  background: white;
+  border-radius: 20px;
+  padding: 8px 10px;
+}
+
+.cities-list {
+  overflow-x: overlay;
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+  height: 8px;
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background: rgb(240, 240, 240);
+  border: 1px solid transparent
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #c9c9c970;
+  border: 1px solid rgb(226, 226, 226);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(183, 183, 183);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(left, #22ADD4, #1E98BA);
+}
+
+.cities-list .list-group-item {
+  margin-bottom: 2em;
 }
