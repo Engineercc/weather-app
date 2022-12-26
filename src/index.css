@@ -130,7 +130,7 @@ h1.weather-c i {
 }
 
 .bg-img.position-absolute .img-cover {
-  background: #110e3cde;
+  background: #110e3c80;
   z-index: 2;
   position: absolute;
   left: 0;
@@ -263,4 +263,7 @@ h1.weather-c i {
 
 .cities-list .list-group-item {
   margin-bottom: 2em;
+}
+tr {
+  vertical-align: middle;
 }

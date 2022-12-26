@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import cities from "./countrycities";
@@ -12,12 +13,25 @@ import snow from "./assets/images/snowy-2.jpg";
 import rain from "./assets/images/rainy.jpg";
 
 const KelvinValue = 273;
+var dayName = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
 function App() {
   const [data, setData] = useState([]);
+  const [fiveDayForecast, setFiveDayForecast] = useState([]);
   const [weatherStat, setWeatherStat] = useState([{}]);
+  const [sys, setSys] = useState({});
   const [city, setCity] = useState("");
   const [country, setCountry] = useState("");
   const [cityValue, setCityValue] = useState("");
+  const [tabCount, setTabCount] = useState(0);
 
   const temp = data.temp && Math.round(data.temp - KelvinValue);
   const feelsLike = data.temp && Math.round(data.feels_like - KelvinValue);
@@ -27,7 +41,9 @@ function App() {
   const cloudyValue = weatherStat[0].main === "Clouds" && cloudy;
   const rainyValue = weatherStat[0].main === "Rain" && rain;
   const snowValue = weatherStat[0].main === "Snow" && snow;
-  const thunderstormValue = weatherStat[0].main === "Thunderstorm" && thunderstorm;
+  const thunderstormValue =
+    weatherStat[0].main === "Thunderstorm" && thunderstorm;
+  const sunsetValue = moment(new Date(sys.sunset)).format("h:mm");
   const getDate = () => {
     const date = moment(new Date()).format("MMMM Do YYYY, h:mm:ss");
     return date;
@@ -40,13 +56,34 @@ function App() {
       const data = response.data;
       setData(data.main);
       setWeatherStat(data.weather);
+      setSys(data.sys);
       getDate();
     } catch (error) {
       console.error(error);
     }
   };
+  const sliceForecast = (weatherValues) => {
+    let itemsPerPage = 8;
+    const page = Math.ceil(weatherValues.length / itemsPerPage);
+    const newForecastDays = Array.from({ length: page }, (_, index) => {
+      const start = index * itemsPerPage;
+      return weatherValues.slice(start, start + itemsPerPage);
+    });
+    return newForecastDays;
+  };
 
-  console.log(weatherStat);
+  const getFiveDayForecast = async (latValue, longValue) => {
+    try {
+      let url = `https://api.openweathermap.org/data/2.5/forecast?lat=${latValue}&lon=${longValue}&appid=${process.env.REACT_APP_WEATHER_API_KEY}`;
+      const response = await axios.get(url);
+      const data = response.data;
+      const arr = sliceForecast(data.list);
+      setFiveDayForecast(arr);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleSearch = (e) => {
     e.preventDefault();
     const latValue = cities.filter(
@@ -55,7 +92,7 @@ function App() {
     const longValue = cities.filter(
       (item) => item.city.toLowerCase() === city.toLowerCase()
     )[0].lng;
-
+    getFiveDayForecast(latValue, longValue);
     getCountry(city);
     getCity(city);
     getData(latValue, longValue);
@@ -75,9 +112,7 @@ function App() {
     setCityValue(cityName);
   };
 
-  useEffect(() => {
-    
-  }, [data]);
+  useEffect(() => {}, [tabCount]);
 
   const handleChange = (e) => {
     setCity(e.target.value);
@@ -262,73 +297,77 @@ function App() {
               <div className="weather-tabs mt-4">
                 <div className="tabs-header">
                   <nav className="nav nav-pills flex-column flex-sm-row">
-                    <a
-                      className="flex-sm-fill text-sm-center nav-link active"
-                      aria-current="page"
-                      href="#"
-                    >
-                      Week
-                    </a>
-                    <a
-                      className="flex-sm-fill text-sm-center nav-link"
-                      href="#"
-                    >
-                      Month
-                    </a>
-                    <a
-                      className="flex-sm-fill text-sm-center nav-link"
-                      href="#"
-                    >
-                      3 Months
-                    </a>
-                    <a
-                      className="flex-sm-fill text-sm-center nav-link"
-                      href="#"
-                    >
-                      6 Months
-                    </a>
+                    {fiveDayForecast.map((day, index) => {
+                      return (
+                        <a
+                          className={`flex-sm-fill text-sm-center nav-link ${
+                            index === tabCount ? "active" : null
+                          }`}
+                          aria-current="page"
+                          href="#"
+                          onClick={() => setTabCount(index)}
+                        >
+                          {tabCount}
+                        </a>
+                      );
+                    })}
                   </nav>
                 </div>
 
                 <div className="tab-content mt-4">
                   <table className="table table-hover table-borderless">
                     <tbody>
-                      <tr>
-                        <td>Sunday</td>
-                        <td>
-                          <i className="icon small humidity me-2">
-                            <svg
-                              width="12"
-                              height="12"
-                              fill="currentColor"
-                              viewBox="0 0 24 24"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path d="M5.636 6.637 12 .273l6.364 6.364a9 9 0 1 1-12.728 0Z"></path>
-                            </svg>
-                          </i>
-                          {data.humidity}%
-                        </td>
-                        <td>
-                          <i className="icon small sun">
-                            <svg
-                              width="18"
-                              height="18"
-                              fill="currentColor"
-                              viewBox="0 0 24 24"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12ZM11 1h2v3h-2V1Zm0 19h2v3h-2v-3ZM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93v-.001ZM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121Zm2.121-14.85 1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121v-.001ZM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121ZM23 11v2h-3v-2h3ZM4 11v2H1v-2h3Z"></path>
-                            </svg>
-                          </i>
-                        </td>
-                        <td className="min-max">
-                          Min. <b>{tempMin} °C</b>
-                        </td>
-                        <td className="min-max">
-                          Max. <b>{tempMax} °C</b>
-                        </td>
-                      </tr>
+                      {fiveDayForecast.map((day, index) => {
+                        const temp = Math.round(
+                          day[index].main.temp - KelvinValue
+                        );
+                        const feelsLike =
+                          day[index].main.temp &&
+                          Math.round(day[index].main.feels_like - KelvinValue);
+                        const tempMin =
+                          day[index].main.temp &&
+                          Math.round(day[index].main.temp_min - KelvinValue);
+                        const tempMax =
+                          day[index].main.temp &&
+                          Math.round(day[index].main.temp_max - KelvinValue);
+                        var currentDay = dayName[index];
+
+                        return (
+                          <tr>
+                            <td>{day[index].dt_txt.slice(11, 16)}</td>
+                            <td>{temp} °C</td>
+                            <td>
+                              <i className="icon small humidity me-2">
+                                <svg
+                                  width="12"
+                                  height="12"
+                                  fill="currentColor"
+                                  viewBox="0 0 24 24"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path d="M5.636 6.637 12 .273l6.364 6.364a9 9 0 1 1-12.728 0Z"></path>
+                                </svg>
+                              </i>
+                              {day[index].main.humidity}%
+                            </td>
+                            <td>
+                              <img
+                                src={`http://openweathermap.org/img/wn/${day[index].weather[0].icon}@2x.png`}
+                                alt=""
+                              />
+                            </td>
+                            <td className="min-max">
+                              Feels Like <b>{feelsLike} °C</b>
+                            </td>
+                            <td className="min-max">
+                              Min. <b>{tempMin} °C</b>
+                            </td>
+                            <td className="min-max">
+                              Max. <b>{tempMax} °C</b>
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
@@ -342,9 +381,9 @@ function App() {
                   cloudyValue || rainyValue || snowValue || thunderstormValue
                 }`}
                 alt=""
-                className="img-fluid "
+                className="img-fluid"
               />
-              <div className="img-cover "></div>
+              <div className="img-cover"></div>
             </div>
 
             <div className="details-container">
@@ -377,7 +416,9 @@ function App() {
                             <div className="me-4">
                               <i className="icon big white">
                                 <img
-                                  src={`http://openweathermap.org/img/wn/${weatherStat[0].icon}@2x.png`}
+                                  src={`http://openweathermap.org/img/wn/${
+                                    data.temp && weatherStat[0].icon
+                                  }@2x.png`}
                                 />
                               </i>
                             </div>
@@ -433,7 +474,7 @@ function App() {
                                   <path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12ZM11 1h2v3h-2V1Zm0 19h2v3h-2v-3ZM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93v-.001ZM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121Zm2.121-14.85 1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121v-.001ZM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121ZM23 11v2h-3v-2h3ZM4 11v2H1v-2h3Z"></path>
                                 </svg>
                               </i>{" "}
-                              Sunset 06:00 PM
+                              Sunset {sunsetValue} (Locale TR)
                             </p>
                           </div>
                         </div>
