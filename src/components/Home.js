@@ -158,18 +158,15 @@ function Home() {
                       onChange={handleChange}
                     />
                   </div>
-                  <button
-                    className="btn btn-success mx-4"
-                    onClick={handleSearch}
-                  >
-                    Ara
+                  <button className="btn btn-success mx-4" type="submit">
+                    Search
                   </button>
                   <button
                     className="btn btn-info"
                     type="button"
                     onClick={clear}
                   >
-                    Temizle
+                    Clear
                   </button>
                 </form>
               </nav>
