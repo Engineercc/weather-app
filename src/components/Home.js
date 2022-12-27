@@ -5,11 +5,11 @@ import axios from "axios";
 import moment from "moment/moment";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import cloudy from "../assets/images/cloudy.jpg";
 import thunderstorm from "../assets/images/thunderstorm.jpg";
 import snow from "../assets/images/snowy-2.jpg";
 import rain from "../assets/images/rainy.jpg";
+import defaultWeather from "../assets/images/default-weather.jpg";
 import { Link } from "react-router-dom";
 const KelvinValue = 273;
 var allDays = [
@@ -173,122 +173,7 @@ function Home() {
                   </button>
                 </form>
               </nav>
-              <div className="cities-list pt-3 scrollable">
-                <ul className="list-group list-group-horizontal">
-                  <li className="list-group-item border-0 p-0 bg-transparent me-4">
-                    <div className="card city-card rounded border-0">
-                      <div className="card-body position-relative rounded">
-                        <div className="city-img position-absolute rounded">
-                          <img
-                            src="https://images.unsplash.com/photo-1564594736624-def7a10ab047?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8&w=1000&q=80"
-                            alt=""
-                            className="img-fluid rounded"
-                          />
-                          <div className="img-cover rounded"></div>
-                        </div>
-
-                        <div className="city-buttons" onClick={handleSearch}>
-                          <button
-                            type="button"
-                            className="btn btn-xs btn-danger favorite-added"
-                          >
-                            <i className="icon small">
-                              <svg
-                                width="46"
-                                height="46"
-                                fill="currentColor"
-                                viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path d="M12.001 4.529a5.998 5.998 0 0 1 8.242.228 6 6 0 0 1 .236 8.236l-8.48 8.492-8.478-8.492a6 6 0 0 1 8.48-8.464Zm6.826 1.641a3.998 3.998 0 0 0-5.49-.153l-1.335 1.198-1.336-1.197a3.999 3.999 0 0 0-5.494.154 4 4 0 0 0-.192 5.451L12 18.654l7.02-7.03a4 4 0 0 0-.193-5.454Z"></path>
-                              </svg>
-                            </i>
-                          </button>
-                        </div>
-                        <div className="city-title position-relative d-flex align-items-start flex-column h-100 justify-content-end">
-                          <p className="fs-5 mb-1">Paris</p>
-                          <p className="fs-7 m-0">France</p>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li className="list-group-item border-0 p-0 bg-transparent me-4">
-                    <div className="card city-card rounded border-0">
-                      <div className="card-body position-relative rounded">
-                        <div className="city-img position-absolute rounded">
-                          <img
-                            src="https://i.natgeofe.com/n/874df281-d3e0-489a-98c0-6b840023b828/newyork_NationalGeographic_2328428_2x3.jpg"
-                            alt=""
-                            className="img-fluid rounded"
-                          />
-                          <div className="img-cover rounded"></div>
-                        </div>
-
-                        <div className="city-buttons">
-                          <button
-                            type="button"
-                            className="btn btn-xs btn-danger"
-                          >
-                            <i className="icon small">
-                              <svg
-                                width="46"
-                                height="46"
-                                fill="currentColor"
-                                viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path d="M12.001 4.529a5.998 5.998 0 0 1 8.242.228 6 6 0 0 1 .236 8.236l-8.48 8.492-8.478-8.492a6 6 0 0 1 8.48-8.464Zm6.826 1.641a3.998 3.998 0 0 0-5.49-.153l-1.335 1.198-1.336-1.197a3.999 3.999 0 0 0-5.494.154 4 4 0 0 0-.192 5.451L12 18.654l7.02-7.03a4 4 0 0 0-.193-5.454Z"></path>
-                              </svg>
-                            </i>
-                          </button>
-                        </div>
-                        <div className="city-title position-relative d-flex align-items-start flex-column h-100 justify-content-end">
-                          <p className="fs-5 mb-1">New York</p>
-                          <p className="fs-7 m-0">United States</p>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                  <li className="list-group-item border-0 p-0 bg-transparent me-4">
-                    <div className="card city-card rounded border-0">
-                      <div className="card-body position-relative rounded">
-                        <div className="city-img position-absolute rounded">
-                          <img
-                            src="https://fastly.4sqi.net/img/general/600x600/42803125_ZIW8_F2rErYjxwUFdvCtO5eDiFTkAZytvPDUzbjOUX0.jpg"
-                            alt=""
-                            className="img-fluid rounded"
-                          />
-                          <div className="img-cover rounded"></div>
-                        </div>
-
-                        <div className="city-buttons">
-                          <button
-                            type="button"
-                            className="btn btn-xs btn-danger"
-                          >
-                            <i className="icon small">
-                              <svg
-                                width="46"
-                                height="46"
-                                fill="currentColor"
-                                viewBox="0 0 24 24"
-                                xmlns="http://www.w3.org/2000/svg"
-                              >
-                                <path d="M12.001 4.529a5.998 5.998 0 0 1 8.242.228 6 6 0 0 1 .236 8.236l-8.48 8.492-8.478-8.492a6 6 0 0 1 8.48-8.464Zm6.826 1.641a3.998 3.998 0 0 0-5.49-.153l-1.335 1.198-1.336-1.197a3.999 3.999 0 0 0-5.494.154 4 4 0 0 0-.192 5.451L12 18.654l7.02-7.03a4 4 0 0 0-.193-5.454Z"></path>
-                              </svg>
-                            </i>
-                          </button>
-                        </div>
-                        <div className="city-title position-relative d-flex align-items-start flex-column h-100 justify-content-end">
-                          <p className="fs-5 mb-1">Ankara</p>
-                          <p className="fs-7 m-0">Turkey</p>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-
+          
               <div className="mt-3 pt-4">
                 <h2> Weather Forecast</h2>
               </div>
@@ -380,7 +265,7 @@ function Home() {
             <div className="bg-img position-absolute">
               <img
                 src={`${
-                  cloudyValue || rainyValue || snowValue || thunderstormValue
+                  cloudyValue || rainyValue || snowValue || thunderstormValue ||defaultWeather
                 }`}
                 alt=""
                 className="img-fluid"
@@ -407,81 +292,87 @@ function Home() {
                             </svg>
                           </i>{" "}
                           Favorite Cities{" "}
-                          <span className="badge bg-light text-dark">25</span>
+                          <span className="badge bg-light text-dark"></span>
                         </Link>
+                       
                       </nav>
                     </div>
-                    <div className="flex-grow-1">
-                      <div className=" h-100 d-flex align-items-center justify-content-center flex-column">
-                        <div>
-                          <div className="d-flex align-items-center">
-                            <div className="me-4">
-                              <i className="icon big white">
-                                <img
-                                  src={`http://openweathermap.org/img/wn/${
-                                    data.temp && weatherStat[0].icon
-                                  }@2x.png`}
-                                />
-                              </i>
+                    {data.temp && (
+                      <div className="flex-grow-1">
+                        <div className=" h-100 d-flex align-items-center justify-content-center flex-column">
+                          <div>
+                            <div className="d-flex align-items-center">
+                              <div className="me-4">
+                                <i className="icon big white">
+                                  {
+                                    <img
+                                      src={`http://openweathermap.org/img/wn/${
+                                        data.temp && weatherStat[0].icon
+                                      }@2x.png`}
+                                      alt={weatherStat[0].icon}
+                                    />
+                                  }
+                                </i>
+                              </div>
+                              <div>
+                                <p className="fs-5 mb-0">Today</p>
+                                <p className=" fs-6 m-0 grayed-out">
+                                  {data.temp && getDate()}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="mt-4 mb-1">
+                            <h1 className="fs-1 m-0 weather-c position-relative">
+                              <b>{data.temp && temp}</b>
+                              <i>°C</i>
+                            </h1>
+                          </div>
+                          <div className="mb-4">
+                            {data.temp && (
+                              <p className="fs-5 grayed-out">
+                                {cityValue},{country}
+                              </p>
+                            )}
+                          </div>
+
+                          <div className="d-flex align-items-center gap-5">
+                            <div>
+                              <p className="fs-7 m-0 grayed-out">
+                                <i className="icon small">
+                                  <svg
+                                    width="18"
+                                    height="18"
+                                    fill="currentColor"
+                                    viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10Zm-1-11v6h2v-6h-2Zm0-4v2h2V7h-2Z"></path>
+                                  </svg>
+                                </i>{" "}
+                                Feels like {feelsLike} °C
+                              </p>
                             </div>
                             <div>
-                              <p className="fs-5 mb-0">Today</p>
-                              <p className=" fs-6 m-0 grayed-out">
-                                {data.temp && getDate()}
+                              <p className="fs-7 m-0 grayed-out">
+                                <i className="icon small">
+                                  <svg
+                                    width="18"
+                                    height="18"
+                                    fill="currentColor"
+                                    viewBox="0 0 24 24"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                  >
+                                    <path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12ZM11 1h2v3h-2V1Zm0 19h2v3h-2v-3ZM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93v-.001ZM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121Zm2.121-14.85 1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121v-.001ZM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121ZM23 11v2h-3v-2h3ZM4 11v2H1v-2h3Z"></path>
+                                  </svg>
+                                </i>{" "}
+                                Sunset {sunsetValue} (Locale TR)
                               </p>
                             </div>
                           </div>
                         </div>
-                        <div className="mt-4 mb-1">
-                          <h1 className="fs-1 m-0 weather-c position-relative">
-                            <b>{data.temp && temp}</b>
-                            <i>°C</i>
-                          </h1>
-                        </div>
-                        <div className="mb-4">
-                          {data.temp && (
-                            <p className="fs-5 grayed-out">
-                              {cityValue},{country}
-                            </p>
-                          )}
-                        </div>
-
-                        <div className="d-flex align-items-center gap-5">
-                          <div>
-                            <p className="fs-7 m-0 grayed-out">
-                              <i className="icon small">
-                                <svg
-                                  width="18"
-                                  height="18"
-                                  fill="currentColor"
-                                  viewBox="0 0 24 24"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10Zm-1-11v6h2v-6h-2Zm0-4v2h2V7h-2Z"></path>
-                                </svg>
-                              </i>{" "}
-                              Feels like {feelsLike} °C
-                            </p>
-                          </div>
-                          <div>
-                            <p className="fs-7 m-0 grayed-out">
-                              <i className="icon small">
-                                <svg
-                                  width="18"
-                                  height="18"
-                                  fill="currentColor"
-                                  viewBox="0 0 24 24"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                >
-                                  <path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12ZM11 1h2v3h-2V1Zm0 19h2v3h-2v-3ZM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93v-.001ZM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121Zm2.121-14.85 1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121v-.001ZM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121ZM23 11v2h-3v-2h3ZM4 11v2H1v-2h3Z"></path>
-                                </svg>
-                              </i>{" "}
-                              Sunset {sunsetValue} (Locale TR)
-                            </p>
-                          </div>
-                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>
