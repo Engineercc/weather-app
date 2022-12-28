@@ -35,4 +35,4 @@ ama ona bakamadım.
 9. Sağ üstteki favori şehirler kısmıda dinamik olarak favori şehirler dizisinin uzunluğunu alıyor.
 10. Projedeki işlemleri react-toastify kullanarak alertlerle desteklemeye çalıştım.
 
-### live version: https://open-weather-case.netlify.app/
+### live version: https://open-weather-case.netlify.app
