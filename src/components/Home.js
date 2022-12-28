@@ -133,7 +133,7 @@ function Home() {
           <div className="col-7">
             <div className="p-3 ">
               <nav className="navbar navbar-light bg-transparent pt-3 pb-4 search-city">
-                <form className="d-flex">
+                <form className="d-flex" onSubmit={handleSearch}>
                   <div className="input-group mb-0">
                     <span className="input-group-text">
                       <i className="icon small white">
