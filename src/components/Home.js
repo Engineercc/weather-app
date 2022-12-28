@@ -11,6 +11,16 @@ import snow from "../assets/images/snowy-2.jpg";
 import rain from "../assets/images/rainy.jpg";
 import defaultWeather from "../assets/images/default-weather.jpg";
 import { Link } from "react-router-dom";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from "recharts";
+
 const KelvinValue = 273;
 var allDays = [
   "Sunday",
@@ -21,6 +31,7 @@ var allDays = [
   "Friday",
   "Saturday",
 ];
+
 
 function Home() {
   const [data, setData] = useState([]);
@@ -77,11 +88,13 @@ function Home() {
       const response = await axios.get(url);
       const data = response.data;
       const arr = sliceForecast(data.list);
+      console.log(data);
       setFiveDayForecast(arr);
     } catch (error) {
       console.error(error);
     }
   };
+
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -111,20 +124,50 @@ function Home() {
     setCityValue(cityName);
   };
 
-  useEffect(() => {}, [tabCount]);
+  useEffect(() => {}, []);
 
   const handleChange = (e) => {
     setCity(e.target.value);
   };
 
-  if (Math.round(data.temp - KelvinValue) < 0) {
-    toast.error("Carefull. Weather is too cold");
-  }
-
   const clear = () => {
     setCity("");
     setData([]);
   };
+
+  const getDays = fiveDayForecast.map((day, index) => {
+    var d = new Date(day[index].dt * 1000); // to get the DateTime.
+    var dayName = allDays[d.getDay()];
+    return dayName;
+  });
+
+ 
+    const modifiedArray = fiveDayForecast.map((item, index) => {
+      let d = new Date(item[index].dt * 1000);
+      let dayName = allDays[d.getDay()];
+      const temp = Math.round(item[tabCount].main.temp - KelvinValue);
+      const feelsLike =
+        item[tabCount].main.temp &&
+        Math.round(item[tabCount].main.feels_like - KelvinValue);
+      const minTemp =
+        item[tabCount].main.temp &&
+        Math.round(item[tabCount].main.temp_min - KelvinValue);
+      const maxTemp =
+        item[tabCount].main.temp &&
+        Math.round(item[tabCount].main.temp_max - KelvinValue);
+      const humidity = item[tabCount].main.humidity;
+      const time = item[index].dt_txt.slice(11, 16);
+      return {
+        currentDay: dayName,
+        time: time,
+        temperature: temp,
+        humidity: humidity,
+        feelsLike: feelsLike,
+        minTemp: minTemp,
+        maxTemp: maxTemp,
+      };
+    });
+
 
   return (
     <div className="App">
@@ -133,7 +176,7 @@ function Home() {
           <div className="col-7">
             <div className="p-3 ">
               <nav className="navbar navbar-light bg-transparent pt-3 pb-4 search-city">
-                <form className="d-flex">
+                <form className="d-flex" onSubmit={handleSearch}>
                   <div className="input-group mb-0">
                     <span className="input-group-text">
                       <i className="icon small white">
@@ -158,7 +201,7 @@ function Home() {
                       onChange={handleChange}
                     />
                   </div>
-                  <button className="btn btn-success mx-4" type="submit">
+                  <button type="submit" className="btn btn-success mx-4">
                     Search
                   </button>
                   <button
@@ -170,7 +213,7 @@ function Home() {
                   </button>
                 </form>
               </nav>
-          
+
               <div className="mt-3 pt-4">
                 <h2> Weather Forecast</h2>
               </div>
@@ -198,6 +241,36 @@ function Home() {
                 </div>
 
                 <div className="tab-content mt-4">
+                  {data.temp && (
+                    <LineChart
+                      width={1000}
+                      height={500}
+                      data={modifiedArray}
+                      margin={{
+                        top: 5,
+                        right: 30,
+                        left: 20,
+                        bottom: 5,
+                      }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="time" />
+                      <YAxis dataKey="temperature" />
+                      <Tooltip />
+                      <Legend />
+                      <Line
+                        type="monotone"
+                        dataKey="minTemp"
+                        stroke="#8884d8"
+                        activeDot={{ r: 8 }}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="maxTemp"
+                        stroke="#82ca9d"
+                      />
+                    </LineChart>
+                  )}
                   <table className="table table-hover table-borderless table-striped">
                     <tbody>
                       {fiveDayForecast.map((day, index) => {
@@ -262,7 +335,11 @@ function Home() {
             <div className="bg-img position-absolute">
               <img
                 src={`${
-                  cloudyValue || rainyValue || snowValue || thunderstormValue ||defaultWeather
+                  cloudyValue ||
+                  rainyValue ||
+                  snowValue ||
+                  thunderstormValue ||
+                  defaultWeather
                 }`}
                 alt=""
                 className="img-fluid"
@@ -291,7 +368,6 @@ function Home() {
                           Favorite Cities{" "}
                           <span className="badge bg-light text-dark"></span>
                         </Link>
-                       
                       </nav>
                     </div>
                     {data.temp && (

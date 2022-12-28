@@ -13,7 +13,19 @@ import defaultWeather from "../assets/images/default-weather.jpg";
 import cityBg from "../assets/images/city-bg.jpg";
 import { Link } from "react-router-dom";
 import { nanoid } from "nanoid";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from "recharts";
+// Constant for converting temperature from Kelvin to Celsius
 const KelvinValue = 273;
+
+// Array of days of the week
 var allDays = [
   "Sunday",
   "Monday",
@@ -24,6 +36,7 @@ var allDays = [
   "Saturday",
 ];
 
+// Function to retrieve favorite cities from local storage
 const getLocalStorage = () => {
   let list = localStorage.getItem("favoriteCities");
   if (list) {
@@ -44,6 +57,7 @@ function FavoriteCities() {
   const [tabCount, setTabCount] = useState(0);
   const [favoriteCities, setFavoriteCities] = useState(getLocalStorage());
 
+  // Calculating current temperature and "feels like" temperature in Celsius
   const temp = data.temp && Math.round(data.temp - KelvinValue);
   const feelsLike = data.temp && Math.round(data.feels_like - KelvinValue);
 
@@ -92,12 +106,41 @@ function FavoriteCities() {
       let url = `https://api.openweathermap.org/data/2.5/forecast?lat=${latValue}&lon=${longValue}&appid=${process.env.REACT_APP_WEATHER_API_KEY}`;
       const response = await axios.get(url);
       const data = response.data;
+      console.log(data);
       const arr = sliceForecast(data.list);
       setFiveDayForecast(arr);
     } catch (error) {
       console.error(error);
     }
   };
+
+ 
+     const modifiedArray = fiveDayForecast.map((item, index) => {
+       let d = new Date(item[index].dt * 1000);
+       let dayName = allDays[d.getDay()];
+       const temp = Math.round(item[tabCount].main.temp - KelvinValue);
+       const feelsLike =
+         item[tabCount].main.temp &&
+         Math.round(item[tabCount].main.feels_like - KelvinValue);
+       const minTemp =
+         item[tabCount].main.temp &&
+         Math.round(item[tabCount].main.temp_min - KelvinValue);
+       const maxTemp =
+         item[tabCount].main.temp &&
+         Math.round(item[tabCount].main.temp_max - KelvinValue);
+       const humidity = item[tabCount].main.humidity;
+       const time = item[index].dt_txt.slice(11, 16);
+       return {
+         currentDay: dayName,
+         time: time,
+         temperature: temp,
+         humidity: humidity,
+         feelsLike: feelsLike,
+         minTemp: minTemp,
+         maxTemp: maxTemp,
+       };
+     });
+
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -131,7 +174,7 @@ function FavoriteCities() {
     setCityValue(cityName);
   };
 
-  useEffect(() => {}, [tabCount, fiveDayForecast]);
+  useEffect(() => {}, []);
 
   const handleChange = (e) => {
     setCity(e.target.value);
@@ -168,7 +211,7 @@ function FavoriteCities() {
     <div className="App">
       <ToastContainer
         position="top-center"
-        autoClose={5000}
+        autoClose={2000}
         closeOnClick
         draggable
         theme="dark"
@@ -301,6 +344,36 @@ function FavoriteCities() {
                 </div>
 
                 <div className="tab-content mt-4">
+                  {data.temp && (
+                    <LineChart
+                      width={1000}
+                      height={500}
+                      data={modifiedArray}
+                      margin={{
+                        top: 5,
+                        right: 30,
+                        left: 20,
+                        bottom: 5,
+                      }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="time" />
+                      <YAxis dataKey="temperature" />
+                      <Tooltip />
+                      <Legend />
+                      <Line
+                        type="monotone"
+                        dataKey="minTemp"
+                        stroke="#8884d8"
+                        activeDot={{ r: 8 }}
+                      />
+                      <Line
+                        type="monotone"
+                        dataKey="maxTemp"
+                        stroke="#82ca9d"
+                      />
+                    </LineChart>
+                  )}
                   <table className="table table-hover table-borderless table-striped">
                     <tbody>
                       {fiveDayForecast.map((day, index) => {
@@ -411,12 +484,12 @@ function FavoriteCities() {
                               xmlns="http://www.w3.org/2000/svg"
                               stroke="#ffffff"
                             >
-                              <g id="SVGRepo_bgCarrier" stroke-width="0" />
+                              <g id="SVGRepo_bgCarrier" strokeWidth="0" />
 
                               <g id="SVGRepo_iconCarrier">
                                 <path
-                                  fill-rule="evenodd"
-                                  clip-rule="evenodd"
+                                  fillRule="evenodd"
+                                  clipRule="evenodd"
                                   d="M1.49613 11.9696L11.4961 6.13622C11.8075 5.95459 12.1925 5.95459 12.5039 6.13622L22.5039 11.9696C22.8111 12.1488 23 12.4777 23 12.8333V21.8423C23 22.3946 22.5523 22.8423 22 22.8423H2C1.44772 22.8423 1 22.3946 1 21.8423V12.8333C1 12.4777 1.18891 12.1488 1.49613 11.9696zM0 9.1013V7.41667C0 7.061 0.188911 6.7321 0.496129 6.55289L11.4961 0.13622C11.8075 -0.045407 12.1925 -0.045407 12.5039 0.13622L23.5039 6.55289C23.8111 6.7321 24 7.061 24 7.41667V9.1013C24 9.6535 23.5523 10.1013 23 10.1013C22.8229 10.1013 22.6491 10.0543 22.4961 9.965L12.5039 4.13622C12.1925 3.95459 11.8075 3.95459 11.4961 4.13622L1.50387 9.965C1.02682 10.2433 0.414501 10.0822 0.136221 9.6051C0.0470084 9.4522 0 9.2783 0 9.1013zM6 13.8423C5.44772 13.8423 5 14.29 5 14.8423V17.8423C5 18.3946 5.44772 18.8423 6 18.8423H9C9.55229 18.8423 10 18.3946 10 17.8423V14.8423C10 14.29 9.55229 13.8423 9 13.8423H6zM14 13.8423C13.4477 13.8423 13 14.29 13 14.8423V22.8423H18V14.8423C18 14.29 17.5523 13.8423 17 13.8423H14z"
                                   fill="#ffffff"
                                 />
