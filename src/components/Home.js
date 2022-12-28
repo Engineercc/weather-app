@@ -44,8 +44,7 @@ function Home() {
 
   const temp = data.temp && Math.round(data.temp - KelvinValue);
   const feelsLike = data.temp && Math.round(data.feels_like - KelvinValue);
-  const tempMin = data.temp && Math.round(data.temp_min - KelvinValue);
-  const tempMax = data.temp && Math.round(data.temp_max - KelvinValue);
+
 
   const cloudyValue = weatherStat[0].main === "Clouds" && cloudy;
   const rainyValue = weatherStat[0].main === "Rain" && rain;
@@ -139,6 +138,7 @@ function Home() {
     return dayName;
   });
 
+  console.log(fiveDayForecast);
   const modifiedArray = fiveDayForecast.map((item, index) => {
     let d = new Date(item[index].dt * 1000);
     let dayName = allDays[d.getDay()];
